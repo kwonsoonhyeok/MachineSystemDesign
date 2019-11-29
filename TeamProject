@@ -1,1 +1,67 @@
+# Input
+D = 80. ; d = 10. ;  pitch = 32. ; Lf = 280. #[mm]
+P = 3675.  #[N]
+G = 76923. #[MPa]
 
+def TAUnDE(D,d,pitch,Lf,P):
+  T = P*D/2 ; C = D/d 
+  Tau_trans = P/(3.14*(d**2)*4)
+  Tau_tor = (8*D*P)/(3.14*(d**3))*(((4*C-1)/(4*C-4))+(0.615/C))
+  Tau = Tau_trans + Tau_tor
+  
+  Na = Lf/pitch
+  delta = (8*Na*(D**3)*P)/(G*(d**4))
+  return Tau,delta
+  
+# 전단응력 n 처짐량
+print('전단응력과 처짐량은',TAUnDE(D,d,pitch,Lf,P))
+
+def TAUnDEbyP(P):
+  #=========================GIVEN=========================
+  D = 80. ; d = 10. ;  pitch = 32. ; Lf = 280.    #[mm] 
+  G = 76923.    #[MPa]
+  #=======================================================
+  
+  C = D/d ; T = P*D/2
+  
+  Tau_trans = P/(3.14*(d**2)*4)
+  Tau_tor = (8*D*P)/(3.14*(d**3))*(((4*C-1)/(4*C-4))+(0.615/C))
+  Tau = Tau_trans + Tau_tor
+
+  Na = Lf/pitch
+  delta = (8*Na*(D**3)*P)/(G*(d**4))
+
+  return Tau,delta
+  
+  
+print('Force의 변화에 따른 전단응력과 처짐량') 
+for i in range(1000,10001,1000):
+  print('Force:',i,TAUnDEbyP(i))
+  
+  
+def TAUnDEbyDnd(D,d):
+  #=========================GIVEN=========================
+  pitch = 32. ; Lf = 280.    #[mm] ;
+  P = 3675.    #[N]
+  G = 76923.   #[MPa]
+  #=======================================================
+  
+  C = D/d ; T = P*D/2.
+  
+  Tau_trans = P/(3.14*(d**2.)*4.)
+  Tau_tor = (8.*D*P)/(3.14*(d**3.))*(((4.*C-1.)/(4.*C-4.))+(0.615/C))
+  Tau = Tau_trans + Tau_tor
+
+  Na = Lf/pitch
+  delta = (8.*Na*(D**3.)*P)/(G*(d**4.))
+
+  return Tau,delta
+
+
+print('D의 변화에 따른 전단응력과 처짐량')
+for i in range(60,106,5):
+  print('D:',i,TAUnDEbyDnd(i,10))
+  
+print('d의 변화에 따른 전단응력과 처짐량')
+for j in range(90,110,2):
+  print('d:',i,TAUnDEbyDnd(80.,j/10))
